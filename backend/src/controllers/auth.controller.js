@@ -15,7 +15,7 @@ async function registerModule(req, res){
         return res.status(400).json({message:"username already exists"});
     }
     await user.create({username, password: await bcrypt.hash(password, 10)});
-    const token=JWT.sign({username}, process.env.JWT_SECRET);
+    const token=JWT.sign({_id: user._id}, process.env.JWT_SECRET);
 
 
     res.cookie("token", token);
@@ -35,7 +35,7 @@ async function loginModule(req, res){
     if(!isMatch){
         return res.status(400).json({message:"invalid password"});
     }
-    const token=JWT.sign({username}, process.env.JWT_SECRET);
+    const token=JWT.sign({_id: userInstance._id}, process.env.JWT_SECRET);
     res.cookie("token", token);
     return res.status(200).json({message:"login successful"});
 
